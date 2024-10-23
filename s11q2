@@ -1,0 +1,51 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from sklearn.preprocessing import StandardScaler
+from sklearn.cluster import AgglomerativeClustering
+from scipy.cluster.hierarchy import dendrogram, linkage
+
+# Step 1: Load the dataset
+url = 'https://raw.githubusercontent.com/jbrownlee/Datasets/master/wholesale-customers.csv'
+data = pd.read_csv(url)
+
+# Display the first few rows of the dataset
+print("Wholesale Customers Dataset:")
+print(data.head())
+
+# Step 2: Preprocess the data
+# The dataset does not contain missing values, but we can verify it
+print("\nChecking for missing values:")
+print(data.isnull().sum())
+
+# The dataset has no need to drop any columns, but we can remove the 'Channel' and 'Region' if we want to cluster only on the numeric data
+# We'll drop these columns for clustering purposes
+data.drop(['Channel', 'Region'], axis=1, inplace=True)
+
+# Step 3: Scale the features
+scaler = StandardScaler()
+data_scaled = scaler.fit_transform(data)
+
+# Step 4: Apply Agglomerative Clustering
+# Let's apply hierarchical clustering with 3 clusters for demonstration
+n_clusters = 3
+agg_clust = AgglomerativeClustering(n_clusters=n_clusters)
+data['Cluster'] = agg_clust.fit_predict(data_scaled)
+
+# Step 5: Visualize the clusters using a dendrogram
+# Create a linkage matrix
+linkage_matrix = linkage(data_scaled, method='ward')
+
+plt.figure(figsize=(10, 7))
+dendrogram(linkage_matrix)
+plt.title('Hierarchical Clustering Dendrogram')
+plt.xlabel('Samples')
+plt.ylabel('Distance')
+plt.axhline(y=7, color='r', linestyle='--')  # Example cut-off line
+plt.show()
+
+# Display the clusters in the dataset
+print("\nClusters assigned to each customer:")
+print(data['Cluster'].value_counts())
