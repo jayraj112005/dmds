@@ -1,0 +1,45 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import scipy.cluster.hierarchy as sch
+from sklearn.cluster import AgglomerativeClustering
+
+# Step 1: Load the dataset from GitHub
+# You can use the raw GitHub link of the dataset
+url = 'https://raw.githubusercontent.com/path_to_dataset/Customer.csv'
+data = pd.read_csv(url)
+
+# Step 2: Explore the dataset
+print(data.head())
+print(data.info())
+
+# Step 3: Select features for clustering
+# Assuming we're clustering based on "Annual Income" and "Spending Score"
+X = data[['Annual Income (k$)', 'Spending Score (1-100)']].values
+
+# Step 4: Create a dendrogram to determine the optimal number of clusters
+plt.figure(figsize=(10, 7))
+dendrogram = sch.dendrogram(sch.linkage(X, method='ward'))
+plt.title("Dendrogram")
+plt.xlabel("Customers")
+plt.ylabel("Euclidean distances")
+plt.show()
+
+# Step 5: Apply Hierarchical Agglomerative Clustering
+# From the dendrogram, let's assume 5 clusters is optimal
+hc = AgglomerativeClustering(n_clusters=5, affinity='euclidean', linkage='ward')
+y_hc = hc.fit_predict(X)
+
+# Step 6: Visualize the clusters
+plt.figure(figsize=(10, 7))
+plt.scatter(X[y_hc == 0, 0], X[y_hc == 0, 1], s=50, c='red', label='Cluster 1')
+plt.scatter(X[y_hc == 1, 0], X[y_hc == 1, 1], s=50, c='blue', label='Cluster 2')
+plt.scatter(X[y_hc == 2, 0], X[y_hc == 2, 1], s=50, c='green', label='Cluster 3')
+plt.scatter(X[y_hc == 3, 0], X[y_hc == 3, 1], s=50, c='cyan', label='Cluster 4')
+plt.scatter(X[y_hc == 4, 0], X[y_hc == 4, 1], s=50, c='magenta', label='Cluster 5')
+plt.title('Clusters of Customers')
+plt.xlabel('Annual Income (k$)')
+plt.ylabel('Spending Score (1-100)')
+plt.legend()
+plt.show()
