@@ -1,0 +1,44 @@
+# Import necessary libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+from scipy.cluster.hierarchy import dendrogram, linkage
+from sklearn.preprocessing import StandardScaler
+
+# Step 1: Load the dataset
+url = "https://raw.githubusercontent.com/amankharwal/Website-data/master/Customer.csv"
+data = pd.read_csv(url)
+
+# Step 2: Display the first few rows of the dataset
+print("Customer Dataset:")
+print(data.head())
+
+# Step 3: Preprocess the data
+# Drop any irrelevant columns if necessary (for example, an ID column)
+# For this example, let's assume the dataset has no irrelevant columns
+# and contains numerical data only. If there are categorical variables,
+# you might want to encode them.
+
+# For demonstration, let's say we're interested in two features
+# Adjust this based on your actual dataset
+features = data[['Annual Income (k$)', 'Spending Score (1-100)']]
+
+# Standardize the features
+scaler = StandardScaler()
+features_scaled = scaler.fit_transform(features)
+
+# Step 4: Apply Hierarchical Agglomerative Clustering
+linked = linkage(features_scaled, method='ward')
+
+# Step 5: Visualize the Dendrogram
+plt.figure(figsize=(10, 7))
+dendrogram(linked,
+           orientation='top',
+           labels=data.index.values,
+           distance_sort='descending',
+           show_leaf_counts=True)
+plt.title('Hierarchical Clustering Dendrogram')
+plt.xlabel('Customer Index')
+plt.ylabel('Distance')
+plt.show()
