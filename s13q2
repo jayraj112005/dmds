@@ -1,0 +1,14 @@
+# Import necessary libraries
+import pandas as pd
+
+# Step 1: Load the dataset
+url = 'https://raw.githubusercontent.com/spscientist/students-performance-in-exams/main/StudentsPerformance.csv'
+data = pd.read_csv(url)
+
+# Step 2: Display the shape of the dataset
+print("Shape of the dataset:")
+print(data.shape)  # (number of rows, number of columns)
+
+# Step 3: Display the top rows of the dataset with their columns
+print("\nTop rows of the dataset:")
+print(data.head())  # Display the first 5 rows
