@@ -1,0 +1,45 @@
+# Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.metrics import accuracy_score, classification_report, confusion_matrix
+import matplotlib.pyplot as plt
+from sklearn import tree
+
+# Step 1: Load the dataset
+# Replace 'path_to_diabetes_dataset.csv' with the actual path of the dataset file on your local machine
+data = pd.read_csv('path_to_diabetes_dataset.csv')
+
+# Step 2: Explore the dataset (optional)
+print(data.head())  # Show the first 5 rows
+print(data.info())  # Show information about columns and data types
+
+# Step 3: Define features (X) and target (y)
+X = data.drop('Outcome', axis=1)  # Features (drop the target column 'Outcome')
+y = data['Outcome']  # Target variable (Outcome)
+
+# Step 4: Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 5: Create and train the Decision Tree Classifier model
+model = DecisionTreeClassifier(random_state=42)
+model.fit(X_train, y_train)
+
+# Step 6: Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Step 7: Evaluate the model's performance
+accuracy = accuracy_score(y_test, y_pred)
+print(f"Accuracy: {accuracy * 100:.2f}%")
+
+# Classification report and confusion matrix
+print("Classification Report:")
+print(classification_report(y_test, y_pred))
+
+print("Confusion Matrix:")
+print(confusion_matrix(y_test, y_pred))
+
+# Step 8: Visualize the Decision Tree (optional)
+plt.figure(figsize=(20,10))
+tree.plot_tree(model, feature_names=X.columns, class_names=['No Diabetes', 'Diabetes'], filled=True)
+plt.show()
