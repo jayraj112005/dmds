@@ -1,0 +1,40 @@
+
+import numpy as np
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.linear_model import LinearRegression
+from sklearn.metrics import mean_absolute_error, mean_squared_error
+
+# Sample student dataset creation (replace this with your actual dataset)
+# Let's assume we have columns 'study_hours' (X) and 'student_scores' (y)
+data = {
+    'study_hours': [2, 3, 5, 7, 9, 10, 11, 12, 15, 16],
+    'student_scores': [10, 15, 20, 30, 45, 50, 55, 60, 70, 75]
+}
+
+# Create a DataFrame
+df = pd.DataFrame(data)
+
+# Define the feature (independent variable) and target (dependent variable)
+X = df[['study_hours']]  # Feature (Study hours)
+y = df['student_scores']  # Target (Student scores)
+
+# Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Create and train the Linear Regression model
+model = LinearRegression()
+model.fit(X_train, y_train)
+
+# Make predictions on the test set
+y_pred = model.predict(X_test)
+
+# Calculate evaluation metrics
+mae = mean_absolute_error(y_test, y_pred)
+mse = mean_squared_error(y_test, y_pred)
+rmse = np.sqrt(mse)
+
+# Print the results
+print("Mean Absolute Error (MAE):", mae)
+print("Mean Squared Error (MSE):", mse)
+print("Root Mean Squared Error (RMSE):", rmse)
