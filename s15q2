@@ -1,0 +1,33 @@
+# Import necessary libraries
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from sklearn.preprocessing import LabelEncoder
+
+# Step 1: Load the dataset
+data = pd.read_csv('shows.csv')
+
+# Step 2: Preprocess the data
+# Encode the label
+label_encoder = LabelEncoder()
+data['Label'] = label_encoder.fit_transform(data['Label'])
+
+# Define features and target variable
+X = data[['Age', 'Experience', 'Ranking']]  # Features
+y = data['Label']                            # Target variable
+
+# Step 3: Split the dataset into training and testing sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+
+# Step 4: Train the Decision Tree Classifier
+classifier = DecisionTreeClassifier()
+classifier.fit(X_train, y_train)
+
+# Step 5: Make a prediction for the given case
+input_data = [[40, 10, 7]]  # 40 years old, 10 years of experience, ranking of 7
+predicted_class = classifier.predict(input_data)
+
+# Convert numeric prediction back to original label
+predicted_label = label_encoder.inverse_transform(predicted_class)
+
+print(f"The predicted class label for the show is: {predicted_label[0]}")
